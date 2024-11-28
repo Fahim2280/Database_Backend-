@@ -24,4 +24,15 @@ const db = new sqlite3.Database("./database/database.db", (err) => {
   }
 });
 
-module.exports = db;
+// Close the database connection when the process exits
+process.on("exit", () => {
+  db.close((err) => {
+    if (err) {
+      console.error("Error closing database:", err.message);
+    } else {
+      console.log("Database connection closed.");
+    }
+  });
+});
+
+export default db;

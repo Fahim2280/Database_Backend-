@@ -1,4 +1,3 @@
-
 import { Router } from "express";
 const router = Router();
 import { all, run } from "../database/db";
@@ -17,7 +16,7 @@ router.get("/users", (req, res) => {
 // Add a new user
 router.post("/users", (req, res) => {
   const { name, email } = req.body;
-  run(
+  db.run(
     "INSERT INTO users (name, email) VALUES (?, ?)",
     [name, email],
     function (err) {
@@ -33,11 +32,11 @@ router.post("/users", (req, res) => {
 // Delete a user
 router.delete("/users/:id", (req, res) => {
   const { id } = req.params;
-  run("DELETE FROM users WHERE id = ?", [id], function (err) {
+  db.run("DELETE FROM users WHERE id = ?", id, function (err) {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ message: "User deleted successfully" });
+      res.json({ message: "User deleted", changes: this.changes });
     }
   });
 });
